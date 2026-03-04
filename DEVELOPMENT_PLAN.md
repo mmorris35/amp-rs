@@ -70,11 +70,11 @@ Use the amp-rs-executor agent to execute subtask X.Y.Z
 - [x] 0.2.2: Testing infrastructure
 
 ### Phase 1: Storage Layer
-- [ ] 1.1.1: SQLite connection manager with WAL
-- [ ] 1.1.2: Schema and migrations
-- [ ] 1.1.3: sqlite-vec extension loading
-- [ ] 1.2.1: Storage trait and error types
-- [ ] 1.2.2: Storage integration tests
+- [x] 1.1.1: SQLite connection manager with WAL
+- [x] 1.1.2: Schema and migrations
+- [x] 1.1.3: sqlite-vec extension loading
+- [x] 1.2.1: Storage trait and error types
+- [x] 1.2.2: Storage integration tests
 
 ### Phase 2: Embedding Engine
 - [ ] 2.1.1: ONNX Runtime session setup
@@ -130,8 +130,8 @@ Use the amp-rs-executor agent to execute subtask X.Y.Z
 - [ ] 9.2.1: CI/CD with GitHub Actions
 - [ ] 9.2.2: Documentation and release prep
 
-**Current**: Phase 1
-**Next**: 1.1.1
+**Current**: Phase 2
+**Next**: 2.1.1
 
 ---
 
