@@ -66,7 +66,8 @@ impl<'a> CheckpointStorage<'a> {
             })
         })?;
 
-        rows.collect::<std::result::Result<Vec<_>, _>>().map_err(Into::into)
+        rows.collect::<std::result::Result<Vec<_>, _>>()
+            .map_err(Into::into)
     }
 
     /// Store embedding vector for a checkpoint
@@ -95,7 +96,7 @@ impl<'a> CheckpointStorage<'a> {
                  JOIN checkpoints c ON c.id = e.id
                  WHERE c.agent = ?1 AND e.embedding MATCH ?2
                  ORDER BY e.distance
-                 LIMIT ?3"
+                 LIMIT ?3",
             )?;
 
             let rows = stmt.query_map(params![agent, query_bytes, limit as i64], |row| {
@@ -107,8 +108,7 @@ impl<'a> CheckpointStorage<'a> {
                         id: row.get(0)?,
                         agent: row.get(1)?,
                         working_on: row.get(2)?,
-                        state: serde_json::from_str(&state_str)
-                            .unwrap_or(serde_json::json!({})),
+                        state: serde_json::from_str(&state_str).unwrap_or(serde_json::json!({})),
                         created_at: DateTime::parse_from_rfc3339(&created_str)
                             .map(|dt| dt.with_timezone(&Utc))
                             .unwrap_or_else(|_| Utc::now()),
@@ -124,7 +124,7 @@ impl<'a> CheckpointStorage<'a> {
                  JOIN checkpoints c ON c.id = e.id
                  WHERE e.embedding MATCH ?1
                  ORDER BY e.distance
-                 LIMIT ?2"
+                 LIMIT ?2",
             )?;
 
             let rows = stmt.query_map(params![query_bytes, limit as i64], |row| {
@@ -136,8 +136,7 @@ impl<'a> CheckpointStorage<'a> {
                         id: row.get(0)?,
                         agent: row.get(1)?,
                         working_on: row.get(2)?,
-                        state: serde_json::from_str(&state_str)
-                            .unwrap_or(serde_json::json!({})),
+                        state: serde_json::from_str(&state_str).unwrap_or(serde_json::json!({})),
                         created_at: DateTime::parse_from_rfc3339(&created_str)
                             .map(|dt| dt.with_timezone(&Utc))
                             .unwrap_or_else(|_| Utc::now()),
@@ -172,7 +171,11 @@ impl<'a> CheckpointStorage<'a> {
                 AgentState::InProgress
             };
 
-            (agent_state, Some(cp.working_on.clone()), Some(cp.created_at))
+            (
+                agent_state,
+                Some(cp.working_on.clone()),
+                Some(cp.created_at),
+            )
         } else {
             (AgentState::Idle, None, None)
         };
@@ -194,7 +197,8 @@ impl<'a> CheckpointStorage<'a> {
 
         let rows = stmt.query_map([], |row| row.get(0))?;
 
-        rows.collect::<std::result::Result<Vec<_>, _>>().map_err(Into::into)
+        rows.collect::<std::result::Result<Vec<_>, _>>()
+            .map_err(Into::into)
     }
 }
 
