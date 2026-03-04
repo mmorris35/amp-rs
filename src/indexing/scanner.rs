@@ -188,6 +188,13 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         let repo_path = temp_dir.path();
 
+        // Initialize git repo so that ignore crate will respect .gitignore
+        std::process::Command::new("git")
+            .arg("init")
+            .current_dir(repo_path)
+            .output()
+            .ok(); // Ignore if git is not available
+
         // Create some test files
         fs::write(repo_path.join("main.rs"), "fn main() {}").unwrap();
         fs::write(repo_path.join("lib.rs"), "pub mod test;").unwrap();

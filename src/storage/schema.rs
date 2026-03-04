@@ -1,6 +1,13 @@
 use crate::error::Result;
+use rusqlite::ffi;
 use rusqlite::Connection;
 use tracing::info;
+
+// Link to sqlite-vec extension
+#[link(name = "sqlite_vec0")]
+extern "C" {
+    fn sqlite3_vec_init();
+}
 
 const SCHEMA_VERSION: i32 = 1;
 
@@ -100,6 +107,22 @@ fn apply_v1(conn: &Connection) -> Result<()> {
 /// Create sqlite-vec virtual tables for vector search
 /// Embedding dimension is 384 for all-MiniLM-L6-v2
 pub fn create_vector_tables(conn: &Connection) -> Result<()> {
+    // Load sqlite-vec extension using auto_extension
+    unsafe {
+        #[allow(clippy::missing_transmute_annotations)]
+        let init_fn = std::mem::transmute::<
+            *const (),
+            unsafe extern "C" fn(
+                *mut ffi::sqlite3,
+                *mut *const i8,
+                *const ffi::sqlite3_api_routines,
+            ) -> i32,
+        >(sqlite3_vec_init as *const ());
+        ffi::sqlite3_auto_extension(Some(init_fn));
+        // Also initialize for this specific connection
+        sqlite3_vec_init();
+    }
+
     conn.execute_batch(
         "
         CREATE VIRTUAL TABLE IF NOT EXISTS lesson_embeddings USING vec0(

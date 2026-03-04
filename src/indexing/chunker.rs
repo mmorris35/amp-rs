@@ -97,7 +97,12 @@ fn semantic_chunk(lines: &[&str], language: &str) -> Option<Vec<(usize, usize, S
         chunks.insert(0, (0, boundaries[0], "header".to_string()));
     }
 
-    Some(chunks)
+    // Return None if no chunks were created, so fallback to sliding window
+    if chunks.is_empty() {
+        None
+    } else {
+        Some(chunks)
+    }
 }
 
 /// Sliding window chunking with overlap
@@ -189,40 +194,74 @@ fn helper() {
 
     #[test]
     fn test_semantic_chunk_rust() {
+        // Create a file with multiple functions spaced out enough to create chunks >= MIN_CHUNK_LINES (5)
         let lines = vec![
             "use std::io;",
+            "use std::fs;",
+            "use std::path::Path;",
             "",
-            "fn main() {",
+            "fn main() {", // boundary at line 4
             "    println!(\"Hello\");",
+            "    println!(\"World\");",
+            "    println!(\"!\");",
             "}",
             "",
-            "fn helper() {",
+            "fn helper() {", // boundary at line 10, 10-4=6 lines in previous chunk (OK)
             "    println!(\"Helper\");",
+            "    println!(\"Function\");",
+            "    println!(\"!\");",
+            "}",
+            "",
+            "fn another() {", // boundary at line 16, 16-10=6 lines (OK)
+            "    println!(\"Another\");",
+            "    println!(\"Function\");",
+            "    println!(\"!\");",
             "}",
         ];
 
         let chunks = semantic_chunk(&lines, "rust");
-        assert!(chunks.is_some());
+        assert!(
+            chunks.is_some(),
+            "semantic_chunk should return Some for Rust code"
+        );
 
         let chunks = chunks.unwrap();
-        assert!(!chunks.is_empty());
+        assert!(!chunks.is_empty(), "chunks should not be empty");
     }
 
     #[test]
     fn test_semantic_chunk_python() {
+        // Create a file with multiple functions spaced out enough to create chunks >= MIN_CHUNK_LINES (5)
         let lines = vec![
             "import sys",
+            "import os",
+            "import json",
             "",
-            "def main():",
+            "def main():", // boundary at line 4
             "    print('Hello')",
+            "    print('World')",
+            "    print('!')",
             "",
-            "class Helper:",
+            "def helper():", // boundary at line 9, 9-4=5 lines in previous chunk (OK)
+            "    print('Helper')",
+            "    print('Function')",
+            "    print('!')",
+            "",
+            "class DataProcessor:", // boundary at line 14, 14-9=5 lines (OK)
             "    def __init__(self):",
-            "        pass",
+            "        self.data = []",
+            "    def process(self):",
+            "        return self.data",
         ];
 
         let chunks = semantic_chunk(&lines, "python");
-        assert!(chunks.is_some());
+        assert!(
+            chunks.is_some(),
+            "semantic_chunk should return Some for Python code"
+        );
+
+        let chunks = chunks.unwrap();
+        assert!(!chunks.is_empty(), "chunks should not be empty");
     }
 
     #[test]
