@@ -49,6 +49,9 @@ impl super::Storage for SqliteStorage {
     }
 
     fn migrate(&self) -> Result<()> {
-        super::schema::run_migrations(&self.conn)
+        super::schema::run_migrations(&self.conn)?;
+        // Try to create vector tables, but ignore errors if sqlite-vec is not available
+        let _ = super::schema::create_vector_tables(&self.conn);
+        Ok(())
     }
 }
