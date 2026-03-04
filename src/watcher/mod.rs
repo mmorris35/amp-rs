@@ -1,4 +1,5 @@
 pub mod handler;
+pub mod service;
 
 use crate::error::Result;
 use notify::RecommendedWatcher;
