@@ -10,7 +10,7 @@ pub fn run_migrations(conn: &Connection) -> Result<()> {
         "CREATE TABLE IF NOT EXISTS schema_version (
             version INTEGER PRIMARY KEY,
             applied_at TEXT NOT NULL DEFAULT (datetime('now'))
-        );"
+        );",
     )?;
 
     let current_version: i32 = conn
@@ -90,7 +90,7 @@ fn apply_v1(conn: &Connection) -> Result<()> {
 
         -- Record migration
         INSERT INTO schema_version (version) VALUES (1);
-        "
+        ",
     )?;
 
     info!("Applied schema v1");
@@ -116,7 +116,7 @@ pub fn create_vector_tables(conn: &Connection) -> Result<()> {
             id TEXT PRIMARY KEY,
             embedding float[384]
         );
-        "
+        ",
     )?;
 
     info!("Created sqlite-vec virtual tables (384 dimensions)");
