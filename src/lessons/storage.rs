@@ -115,9 +115,8 @@ impl<'a> LessonStorage<'a> {
             let mut stmt = self.conn.prepare(
                 "SELECT id, title, content, tags, severity, created_at, updated_at FROM lessons ORDER BY created_at DESC LIMIT ?1"
             )?;
-            let rows = stmt.query_map(params![limit as i64], |row| {
-                Ok(self.parse_lesson_row(row))
-            })?;
+            let rows =
+                stmt.query_map(params![limit as i64], |row| Ok(self.parse_lesson_row(row)))?;
             for row in rows {
                 lessons.push(row??);
             }
@@ -128,11 +127,9 @@ impl<'a> LessonStorage<'a> {
 
     /// Count total lessons
     pub fn count(&self) -> Result<usize> {
-        let count: i64 = self.conn.query_row(
-            "SELECT COUNT(*) FROM lessons",
-            [],
-            |row| row.get(0),
-        )?;
+        let count: i64 = self
+            .conn
+            .query_row("SELECT COUNT(*) FROM lessons", [], |row| row.get(0))?;
         Ok(count as usize)
     }
 
@@ -149,21 +146,19 @@ impl<'a> LessonStorage<'a> {
     /// Delete a lesson and its embedding
     pub fn delete(&self, id: &str) -> Result<bool> {
         // Delete embedding if it exists
-        let _ = self.conn.execute(
-            "DELETE FROM lesson_embeddings WHERE id = ?1",
-            params![id],
-        );
+        let _ = self
+            .conn
+            .execute("DELETE FROM lesson_embeddings WHERE id = ?1", params![id]);
 
-        let rows = self.conn.execute("DELETE FROM lessons WHERE id = ?1", params![id])?;
+        let rows = self
+            .conn
+            .execute("DELETE FROM lessons WHERE id = ?1", params![id])?;
         Ok(rows > 0)
     }
 
     /// Store embedding for a lesson
     pub fn store_embedding(&self, lesson_id: &str, embedding: &[f32]) -> Result<()> {
-<<<<<<< HEAD
-=======
         // Convert f32 slice to bytes using bytemuck
->>>>>>> feature/5-1-indexing-pipeline
         let embedding_bytes = bytemuck::cast_slice(embedding);
         self.conn.execute(
             "INSERT INTO lesson_embeddings (id, embedding) VALUES (?1, ?2)",
@@ -173,7 +168,11 @@ impl<'a> LessonStorage<'a> {
     }
 
     /// Search lessons by embedding similarity
-    pub fn search_by_embedding(&self, query_embedding: &[f32], limit: usize) -> Result<Vec<(Lesson, f64)>> {
+    pub fn search_by_embedding(
+        &self,
+        query_embedding: &[f32],
+        limit: usize,
+    ) -> Result<Vec<(Lesson, f64)>> {
         let query_bytes = bytemuck::cast_slice(query_embedding);
         let mut stmt = self.conn.prepare(
             "SELECT l.id, l.title, l.content, l.tags, l.severity, l.created_at, l.updated_at, e.distance
@@ -192,10 +191,7 @@ impl<'a> LessonStorage<'a> {
                 content: row.get(2)?,
                 tags: serde_json::from_str::<Vec<String>>(&row.get::<_, String>(3)?)
                     .unwrap_or_default(),
-                severity: row
-                    .get::<_, String>(4)?
-                    .parse()
-                    .unwrap_or(Severity::Info),
+                severity: row.get::<_, String>(4)?.parse().unwrap_or(Severity::Info),
                 created_at: DateTime::parse_from_rfc3339(&row.get::<_, String>(5)?)
                     .map(|dt| dt.with_timezone(&Utc))
                     .unwrap_or_else(|_| Utc::now()),

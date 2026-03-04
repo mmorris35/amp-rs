@@ -205,19 +205,18 @@ impl<'a> CheckpointStorage<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rusqlite::Connection;
+    use crate::storage::{sqlite::SqliteStorage, Storage};
 
-    fn setup_db() -> Connection {
-        let conn = Connection::open_in_memory().unwrap();
-        crate::storage::schema::run_migrations(&conn).unwrap();
-        crate::storage::schema::create_vector_tables(&conn).unwrap();
-        conn
+    fn setup() -> SqliteStorage {
+        let storage = SqliteStorage::open_in_memory().unwrap();
+        storage.migrate().unwrap();
+        storage
     }
 
     #[test]
     fn test_add_checkpoint() {
-        let conn = setup_db();
-        let storage = CheckpointStorage::new(&conn);
+        let db = setup();
+        let storage = CheckpointStorage::new(db.connection());
 
         let state = serde_json::json!({ "key": "value" });
         let result = storage.add("test-agent", "testing", &state);
@@ -231,8 +230,8 @@ mod tests {
 
     #[test]
     fn test_get_recent() {
-        let conn = setup_db();
-        let storage = CheckpointStorage::new(&conn);
+        let db = setup();
+        let storage = CheckpointStorage::new(db.connection());
 
         let state1 = serde_json::json!({ "task": 1 });
         let state2 = serde_json::json!({ "task": 2 });
@@ -250,8 +249,8 @@ mod tests {
 
     #[test]
     fn test_get_agent_status_in_progress() {
-        let conn = setup_db();
-        let storage = CheckpointStorage::new(&conn);
+        let db = setup();
+        let storage = CheckpointStorage::new(db.connection());
 
         let state = serde_json::json!({ "data": "test" });
         storage.add("agent1", "current-task", &state).unwrap();
@@ -266,8 +265,8 @@ mod tests {
 
     #[test]
     fn test_get_agent_status_idle() {
-        let conn = setup_db();
-        let storage = CheckpointStorage::new(&conn);
+        let db = setup();
+        let storage = CheckpointStorage::new(db.connection());
 
         // Insert a checkpoint with an old timestamp (more than 1 hour ago)
         let old_time = Utc::now() - chrono::Duration::hours(2);
@@ -275,12 +274,13 @@ mod tests {
         let state = serde_json::json!({ "data": "old" });
         let state_str = serde_json::to_string(&state).unwrap();
 
-        conn.execute(
-            "INSERT INTO checkpoints (id, agent, working_on, state, created_at)
-             VALUES (?1, ?2, ?3, ?4, ?5)",
-            params![id, "agent2", "old-task", state_str, old_time.to_rfc3339()],
-        )
-        .unwrap();
+        db.connection()
+            .execute(
+                "INSERT INTO checkpoints (id, agent, working_on, state, created_at)
+                 VALUES (?1, ?2, ?3, ?4, ?5)",
+                params![id, "agent2", "old-task", state_str, old_time.to_rfc3339()],
+            )
+            .unwrap();
 
         let status = storage.get_agent_status("agent2").unwrap();
         assert_eq!(status.agent, "agent2");
@@ -290,8 +290,8 @@ mod tests {
 
     #[test]
     fn test_multiple_agents() {
-        let conn = setup_db();
-        let storage = CheckpointStorage::new(&conn);
+        let db = setup();
+        let storage = CheckpointStorage::new(db.connection());
 
         let state = serde_json::json!({});
         storage.add("agent1", "task", &state).unwrap();
@@ -305,8 +305,8 @@ mod tests {
 
     #[test]
     fn test_list_agents() {
-        let conn = setup_db();
-        let storage = CheckpointStorage::new(&conn);
+        let db = setup();
+        let storage = CheckpointStorage::new(db.connection());
 
         let state = serde_json::json!({});
         storage.add("agent-z", "task", &state).unwrap();
