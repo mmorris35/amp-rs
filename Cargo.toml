@@ -49,6 +49,7 @@ chrono = { version = "0.4", features = ["serde"] }
 ignore = "0.4"  # .gitignore support (from ripgrep)
 walkdir = "2"
 tempfile = "3"
+shellexpand = "3"
 
 [dev-dependencies]
 tempfile = "3"
