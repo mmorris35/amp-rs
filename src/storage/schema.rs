@@ -114,9 +114,9 @@ pub fn create_vector_tables(conn: &Connection) -> Result<()> {
             *const (),
             unsafe extern "C" fn(
                 *mut ffi::sqlite3,
-                *mut *const i8,
+                *mut *const std::ffi::c_char,
                 *const ffi::sqlite3_api_routines,
-            ) -> i32,
+            ) -> std::ffi::c_int,
         >(sqlite3_vec_init as *const ());
         ffi::sqlite3_auto_extension(Some(init_fn));
         // Also initialize for this specific connection
