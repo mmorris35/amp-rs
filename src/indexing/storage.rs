@@ -377,6 +377,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore] // requires sqlite-vec native extension
     fn test_search_chunks() {
         use tempfile::NamedTempFile;
 
