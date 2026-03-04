@@ -69,12 +69,7 @@ fn bench_lesson_insert() {
 
     let elapsed = measure_ms(|| {
         for i in 0..100 {
-            let _ = lesson_storage.add(
-                &format!("Lesson {}", i),
-                "Content",
-                &vec![],
-                &Severity::Info,
-            );
+            let _ = lesson_storage.add(&format!("Lesson {}", i), "Content", &[], &Severity::Info);
         }
     });
 
@@ -98,12 +93,7 @@ fn bench_lesson_list_all() {
 
     // Insert test data
     for i in 0..100 {
-        let _ = lesson_storage.add(
-            &format!("Lesson {}", i),
-            "Content",
-            &vec![],
-            &Severity::Info,
-        );
+        let _ = lesson_storage.add(&format!("Lesson {}", i), "Content", &[], &Severity::Info);
     }
 
     let elapsed = measure_ms(|| {
@@ -131,7 +121,7 @@ fn bench_lesson_list_by_severity() {
             1 => Severity::Warning,
             _ => Severity::Info,
         };
-        let _ = lesson_storage.add(&format!("Lesson {}", i), "Content", &vec![], &sev);
+        let _ = lesson_storage.add(&format!("Lesson {}", i), "Content", &[], &sev);
     }
 
     let elapsed = measure_ms(|| {
@@ -251,12 +241,7 @@ fn bench_lesson_delete() {
     let mut ids = Vec::new();
     for i in 0..100 {
         let lesson = lesson_storage
-            .add(
-                &format!("Lesson {}", i),
-                "Content",
-                &vec![],
-                &Severity::Info,
-            )
+            .add(&format!("Lesson {}", i), "Content", &[], &Severity::Info)
             .expect("Failed");
         ids.push(lesson.id);
     }
@@ -287,12 +272,7 @@ fn bench_scaling_lessons_10() {
 
     // Insert test data
     for i in 0..10 {
-        let _ = lesson_storage.add(
-            &format!("Lesson {}", i),
-            "Content",
-            &vec![],
-            &Severity::Info,
-        );
+        let _ = lesson_storage.add(&format!("Lesson {}", i), "Content", &[], &Severity::Info);
     }
 
     let elapsed = measure_ms(|| {
@@ -315,12 +295,7 @@ fn bench_scaling_lessons_50() {
 
     // Insert test data
     for i in 0..50 {
-        let _ = lesson_storage.add(
-            &format!("Lesson {}", i),
-            "Content",
-            &vec![],
-            &Severity::Info,
-        );
+        let _ = lesson_storage.add(&format!("Lesson {}", i), "Content", &[], &Severity::Info);
     }
 
     let elapsed = measure_ms(|| {
@@ -343,12 +318,7 @@ fn bench_scaling_lessons_100() {
 
     // Insert test data
     for i in 0..100 {
-        let _ = lesson_storage.add(
-            &format!("Lesson {}", i),
-            "Content",
-            &vec![],
-            &Severity::Info,
-        );
+        let _ = lesson_storage.add(&format!("Lesson {}", i), "Content", &[], &Severity::Info);
     }
 
     let elapsed = measure_ms(|| {

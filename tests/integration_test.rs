@@ -101,25 +101,20 @@ fn e2e_lesson_severity_filtering() {
 
     // Add lessons with different severities
     lesson_storage
-        .add(
-            "Critical Bug",
-            "This is critical",
-            &vec![],
-            &Severity::Critical,
-        )
+        .add("Critical Bug", "This is critical", &[], &Severity::Critical)
         .expect("Failed");
 
     lesson_storage
         .add(
             "Warning Pattern",
             "This is a warning",
-            &vec![],
+            &[],
             &Severity::Warning,
         )
         .expect("Failed");
 
     lesson_storage
-        .add("Info Tip", "This is info", &vec![], &Severity::Info)
+        .add("Info Tip", "This is info", &[], &Severity::Info)
         .expect("Failed");
 
     // Test each severity filter
@@ -164,7 +159,7 @@ fn e2e_lesson_batch_operations() {
         let _ = lesson_storage.add(
             &format!("Batch Lesson {}", i),
             &format!("Content {}", i),
-            &vec![],
+            &[],
             &Severity::Info,
         );
     }
@@ -519,7 +514,7 @@ fn cross_feature_lesson_and_checkpoint_mix() {
 
     // Add lessons and checkpoints in mixed order
     let lesson1 = lesson_storage
-        .add("Lesson 1", "Content 1", &vec![], &Severity::Info)
+        .add("Lesson 1", "Content 1", &[], &Severity::Info)
         .expect("Failed");
 
     let checkpoint1 = checkpoint_storage
@@ -527,7 +522,7 @@ fn cross_feature_lesson_and_checkpoint_mix() {
         .expect("Failed");
 
     let lesson2 = lesson_storage
-        .add("Lesson 2", "Content 2", &vec![], &Severity::Warning)
+        .add("Lesson 2", "Content 2", &[], &Severity::Warning)
         .expect("Failed");
 
     let checkpoint2 = checkpoint_storage
@@ -535,7 +530,7 @@ fn cross_feature_lesson_and_checkpoint_mix() {
         .expect("Failed");
 
     let lesson3 = lesson_storage
-        .add("Lesson 3", "Content 3", &vec![], &Severity::Critical)
+        .add("Lesson 3", "Content 3", &[], &Severity::Critical)
         .expect("Failed");
 
     // Verify both systems have all their data
@@ -571,7 +566,7 @@ fn cross_feature_multiple_agents_lessons() {
         let _ = lesson_storage.add(
             &format!("Agent1 Lesson {}", i),
             &format!("Content {}", i),
-            &vec![],
+            &[],
             &Severity::Info,
         );
     }
@@ -589,7 +584,7 @@ fn cross_feature_multiple_agents_lessons() {
         let _ = lesson_storage.add(
             &format!("Agent2 Lesson {}", i),
             &format!("Content {}", i),
-            &vec![],
+            &[],
             &Severity::Warning,
         );
     }
@@ -632,15 +627,15 @@ fn cross_feature_severity_mix_with_checkpoints() {
 
     // Create lessons with all severity levels
     let critical = lesson_storage
-        .add("Critical", "Critical lesson", &vec![], &Severity::Critical)
+        .add("Critical", "Critical lesson", &[], &Severity::Critical)
         .expect("Failed");
 
     let warning = lesson_storage
-        .add("Warning", "Warning lesson", &vec![], &Severity::Warning)
+        .add("Warning", "Warning lesson", &[], &Severity::Warning)
         .expect("Failed");
 
     let info = lesson_storage
-        .add("Info", "Info lesson", &vec![], &Severity::Info)
+        .add("Info", "Info lesson", &[], &Severity::Info)
         .expect("Failed");
 
     // Create checkpoints for each severity level
@@ -695,7 +690,7 @@ fn cross_feature_delete_and_recreate() {
 
     // Add initial data
     let lesson1 = lesson_storage
-        .add("Initial", "Content", &vec![], &Severity::Info)
+        .add("Initial", "Content", &[], &Severity::Info)
         .expect("Failed");
 
     let cp1 = checkpoint_storage
@@ -708,7 +703,7 @@ fn cross_feature_delete_and_recreate() {
 
     // Create new lesson with same name (different ID)
     let lesson2 = lesson_storage
-        .add("Initial", "New content", &vec![], &Severity::Warning)
+        .add("Initial", "New content", &[], &Severity::Warning)
         .expect("Failed");
 
     // Verify IDs are different
@@ -743,7 +738,7 @@ fn cross_feature_large_scale_operations() {
     const LESSONS_PER_SEVERITY: usize = 16;
     for sev in &severities {
         for i in 0..LESSONS_PER_SEVERITY {
-            let _ = lesson_storage.add(&format!("Lesson {:?} {}", sev, i), "Content", &vec![], sev);
+            let _ = lesson_storage.add(&format!("Lesson {:?} {}", sev, i), "Content", &[], sev);
         }
     }
 
@@ -895,7 +890,7 @@ fn cross_feature_storage_and_retrieval_consistency() {
         let lesson_storage = LessonStorage::new(conn);
 
         let new_lesson = lesson_storage
-            .add("New Lesson", "New content", &vec![], &Severity::Info)
+            .add("New Lesson", "New content", &[], &Severity::Info)
             .expect("Failed");
 
         // Verify both old and new exist
