@@ -1,1 +1,1 @@
-// Lesson service layer - placeholder for subtask 3.2.1
+// Lesson service placeholder - will be implemented in subtask 3.2.1

@@ -87,25 +87,36 @@ impl<'a> CheckpointStorage<'a> {
         agent_filter: Option<&str>,
     ) -> Result<Vec<(Checkpoint, f64)>> {
         let query_bytes = bytemuck::cast_slice(query_embedding);
-        let mut results = Vec::new();
 
-        if let Some(agent) = agent_filter {
+        let results = if let Some(agent) = agent_filter {
             let mut stmt = self.conn.prepare(
                 "SELECT c.id, c.agent, c.working_on, c.state, c.created_at, e.distance
                  FROM checkpoint_embeddings e
                  JOIN checkpoints c ON c.id = e.id
                  WHERE c.agent = ?1 AND e.embedding MATCH ?2
                  ORDER BY e.distance
-                 LIMIT ?3",
+                 LIMIT ?3"
             )?;
 
-            let rows = stmt.query_map(
-                params![agent, query_bytes, limit as i64],
-                |row| self.parse_checkpoint_with_distance(row),
-            )?;
-            for result in rows {
-                results.push(result?);
-            }
+            let rows = stmt.query_map(params![agent, query_bytes, limit as i64], |row| {
+                let state_str: String = row.get(3)?;
+                let created_str: String = row.get(4)?;
+                let distance: f64 = row.get(5)?;
+                Ok((
+                    Checkpoint {
+                        id: row.get(0)?,
+                        agent: row.get(1)?,
+                        working_on: row.get(2)?,
+                        state: serde_json::from_str(&state_str)
+                            .unwrap_or(serde_json::json!({})),
+                        created_at: DateTime::parse_from_rfc3339(&created_str)
+                            .map(|dt| dt.with_timezone(&Utc))
+                            .unwrap_or_else(|_| Utc::now()),
+                    },
+                    distance,
+                ))
+            })?;
+            rows.collect::<std::result::Result<Vec<_>, _>>()?
         } else {
             let mut stmt = self.conn.prepare(
                 "SELECT c.id, c.agent, c.working_on, c.state, c.created_at, e.distance
@@ -113,42 +124,31 @@ impl<'a> CheckpointStorage<'a> {
                  JOIN checkpoints c ON c.id = e.id
                  WHERE e.embedding MATCH ?1
                  ORDER BY e.distance
-                 LIMIT ?2",
+                 LIMIT ?2"
             )?;
 
-            let rows =
-                stmt.query_map(params![query_bytes, limit as i64], |row| {
-                    self.parse_checkpoint_with_distance(row)
-                })?;
-            for result in rows {
-                results.push(result?);
-            }
-        }
+            let rows = stmt.query_map(params![query_bytes, limit as i64], |row| {
+                let state_str: String = row.get(3)?;
+                let created_str: String = row.get(4)?;
+                let distance: f64 = row.get(5)?;
+                Ok((
+                    Checkpoint {
+                        id: row.get(0)?,
+                        agent: row.get(1)?,
+                        working_on: row.get(2)?,
+                        state: serde_json::from_str(&state_str)
+                            .unwrap_or(serde_json::json!({})),
+                        created_at: DateTime::parse_from_rfc3339(&created_str)
+                            .map(|dt| dt.with_timezone(&Utc))
+                            .unwrap_or_else(|_| Utc::now()),
+                    },
+                    distance,
+                ))
+            })?;
+            rows.collect::<std::result::Result<Vec<_>, _>>()?
+        };
 
         Ok(results)
-    }
-
-    /// Parse checkpoint with distance from a database row
-    fn parse_checkpoint_with_distance(
-        &self,
-        row: &rusqlite::Row,
-    ) -> std::result::Result<(Checkpoint, f64), rusqlite::Error> {
-        let state_str: String = row.get(3)?;
-        let created_str: String = row.get(4)?;
-        let distance: f64 = row.get(5)?;
-
-        Ok((
-            Checkpoint {
-                id: row.get(0)?,
-                agent: row.get(1)?,
-                working_on: row.get(2)?,
-                state: serde_json::from_str(&state_str).unwrap_or(serde_json::json!({})),
-                created_at: DateTime::parse_from_rfc3339(&created_str)
-                    .map(|dt| dt.with_timezone(&Utc))
-                    .unwrap_or_else(|_| Utc::now()),
-            },
-            distance,
-        ))
     }
 
     /// Get aggregated status for an agent with time-based idle detection

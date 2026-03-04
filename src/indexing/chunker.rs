@@ -52,7 +52,9 @@ pub fn chunk_file(
 /// Attempt semantic chunking based on language patterns
 fn semantic_chunk(lines: &[&str], language: &str) -> Option<Vec<(usize, usize, String)>> {
     let boundary_patterns: &[&str] = match language {
-        "rust" => &["fn ", "pub fn ", "impl ", "struct ", "enum ", "trait ", "mod "],
+        "rust" => &[
+            "fn ", "pub fn ", "impl ", "struct ", "enum ", "trait ", "mod ",
+        ],
         "python" => &["def ", "class ", "async def "],
         "javascript" | "typescript" => &["function ", "class ", "const ", "export "],
         "go" => &["func ", "type "],
@@ -127,8 +129,7 @@ mod tests {
         let file_path = temp_dir.path().join("empty.rs");
         fs::write(&file_path, "").unwrap();
 
-        let chunks =
-            chunk_file(&file_path, temp_dir.path(), &Some("rust".to_string())).unwrap();
+        let chunks = chunk_file(&file_path, temp_dir.path(), &Some("rust".to_string())).unwrap();
         assert!(chunks.is_empty());
     }
 
@@ -145,8 +146,7 @@ fn helper() {
 }"#;
         fs::write(&file_path, content).unwrap();
 
-        let chunks =
-            chunk_file(&file_path, temp_dir.path(), &Some("rust".to_string())).unwrap();
+        let chunks = chunk_file(&file_path, temp_dir.path(), &Some("rust".to_string())).unwrap();
         assert!(!chunks.is_empty());
 
         // Should have semantic chunks

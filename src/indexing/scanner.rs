@@ -9,16 +9,16 @@ pub fn scan_directory(repo_path: &Path) -> Result<Vec<ScannedFile>> {
     let mut files = Vec::new();
 
     let walker = WalkBuilder::new(repo_path)
-        .hidden(true)
-        .git_ignore(true)
-        .git_global(true)
-        .git_exclude(true)
+        .hidden(true)           // Skip hidden files
+        .git_ignore(true)       // Respect .gitignore
+        .git_global(true)       // Respect global gitignore
+        .git_exclude(true)      // Respect .git/info/exclude
         .build();
 
     for entry in walker {
         let entry = entry.map_err(|e| crate::error::AmpError::Indexing(e.to_string()))?;
 
-        if !entry.file_type().map_or(false, |ft| ft.is_file()) {
+        if !entry.file_type().is_some_and(|ft| ft.is_file()) {
             continue;
         }
 
@@ -33,7 +33,11 @@ pub fn scan_directory(repo_path: &Path) -> Result<Vec<ScannedFile>> {
         let metadata = std::fs::metadata(&path)?;
         let mtime = metadata
             .modified()
-            .map(|t| t.duration_since(std::time::UNIX_EPOCH).unwrap_or_default().as_secs())
+            .map(|t| {
+                t.duration_since(std::time::UNIX_EPOCH)
+                    .unwrap_or_default()
+                    .as_secs()
+            })
             .unwrap_or(0);
 
         files.push(ScannedFile {
@@ -120,7 +124,10 @@ mod tests {
 
     #[test]
     fn test_detect_language() {
-        assert_eq!(detect_language(Path::new("test.rs")), Some("rust".to_string()));
+        assert_eq!(
+            detect_language(Path::new("test.rs")),
+            Some("rust".to_string())
+        );
         assert_eq!(
             detect_language(Path::new("test.py")),
             Some("python".to_string())
@@ -133,8 +140,14 @@ mod tests {
             detect_language(Path::new("test.ts")),
             Some("typescript".to_string())
         );
-        assert_eq!(detect_language(Path::new("test.go")), Some("go".to_string()));
-        assert_eq!(detect_language(Path::new("test.java")), Some("java".to_string()));
+        assert_eq!(
+            detect_language(Path::new("test.go")),
+            Some("go".to_string())
+        );
+        assert_eq!(
+            detect_language(Path::new("test.java")),
+            Some("java".to_string())
+        );
         assert_eq!(detect_language(Path::new("test.unknown")), None);
     }
 
@@ -144,7 +157,10 @@ mod tests {
         assert!(!is_indexable(Path::new("test.bin"), &None));
 
         // Valid language
-        assert!(is_indexable(Path::new("test.rs"), &Some("rust".to_string())));
+        assert!(is_indexable(
+            Path::new("test.rs"),
+            &Some("rust".to_string())
+        ));
 
         // Skip known patterns
         let skip_paths = [

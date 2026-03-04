@@ -160,6 +160,10 @@ impl<'a> LessonStorage<'a> {
 
     /// Store embedding for a lesson
     pub fn store_embedding(&self, lesson_id: &str, embedding: &[f32]) -> Result<()> {
+<<<<<<< HEAD
+=======
+        // Convert f32 slice to bytes using bytemuck
+>>>>>>> feature/5-1-indexing-pipeline
         let embedding_bytes = bytemuck::cast_slice(embedding);
         self.conn.execute(
             "INSERT INTO lesson_embeddings (id, embedding) VALUES (?1, ?2)",
