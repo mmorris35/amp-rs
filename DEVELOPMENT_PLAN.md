@@ -117,11 +117,11 @@ Use the amp-rs-executor agent to execute subtask X.Y.Z
 - [x] 7.2.2: Server status tool and MCP integration tests
 
 ### Phase 8: HTTP & CLI
-- [ ] 8.1.1: Axum HTTP server with health check
-- [ ] 8.1.2: REST status endpoint
-- [ ] 8.1.3: Serve command combining MCP + HTTP
-- [ ] 8.2.1: clap CLI with config file support
-- [ ] 8.2.2: CLI and config integration tests
+- [x] 8.1.1: Axum HTTP server with health check
+- [x] 8.1.2: REST status endpoint
+- [x] 8.1.3: Serve command combining MCP + HTTP
+- [x] 8.2.1: clap CLI with config file support
+- [x] 8.2.2: CLI and config integration tests
 
 ### Phase 9: Integration & Release
 - [ ] 9.1.1: End-to-end MCP protocol tests
@@ -130,8 +130,8 @@ Use the amp-rs-executor agent to execute subtask X.Y.Z
 - [ ] 9.2.1: CI/CD with GitHub Actions
 - [ ] 9.2.2: Documentation and release prep
 
-**Current**: Phase 6 (Complete), Phase 7 (Complete)
-**Next**: Phase 8 (HTTP & CLI)
+**Current**: Phase 8 (Complete)
+**Next**: Phase 9 (Integration & Release)
 
 ---
 
