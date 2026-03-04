@@ -1,0 +1,55 @@
+[package]
+name = "amp-rs"
+version = "0.1.0"
+edition = "2021"
+description = "Reference implementation of Agent Memory Protocol (AMP)"
+license = "MIT"
+repository = "https://github.com/mmorris35/amp-rs"
+
+[dependencies]
+# MCP Protocol
+rmcp = { version = "0.1", features = ["server", "transport-io"] }
+
+# Async Runtime
+tokio = { version = "1", features = ["full"] }
+
+# HTTP Server
+axum = "0.7"
+tower-http = { version = "0.5", features = ["cors"] }
+
+# Database
+rusqlite = { version = "0.31", features = ["bundled", "vtab"] }
+
+# Embeddings
+ort = "2.0.0-rc.11"
+tokenizers = "0.19"
+ndarray = "0.15"
+
+# File Watching
+notify = "6"
+notify-debouncer-mini = "0.4"
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+
+# Utilities
+anyhow = "1"
+thiserror = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+uuid = { version = "1", features = ["v4"] }
+chrono = { version = "0.4", features = ["serde"] }
+ignore = "0.4"  # .gitignore support (from ripgrep)
+walkdir = "2"
+tempfile = "3"
+
+[dev-dependencies]
+tempfile = "3"
+tokio-test = "0.4"
+assert_cmd = "2"
+predicates = "3"
