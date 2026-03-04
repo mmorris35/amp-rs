@@ -110,11 +110,11 @@ Use the amp-rs-executor agent to execute subtask X.Y.Z
 - [ ] 6.2.2: File watcher integration tests
 
 ### Phase 7: MCP Server
-- [ ] 7.1.1: rmcp server bootstrap (stdio transport)
-- [ ] 7.1.2: Lesson MCP tools (add, search, list, delete)
-- [ ] 7.1.3: Checkpoint MCP tools (add, get_recent, search, get_status)
-- [ ] 7.2.1: Code search and indexing MCP tools
-- [ ] 7.2.2: Server status tool and MCP integration tests
+- [x] 7.1.1: rmcp server bootstrap (stdio transport)
+- [x] 7.1.2: Lesson MCP tools (add, search, list, delete)
+- [x] 7.1.3: Checkpoint MCP tools (add, get_recent, search, get_status)
+- [x] 7.2.1: Code search and indexing MCP tools
+- [x] 7.2.2: Server status tool and MCP integration tests
 
 ### Phase 8: HTTP & CLI
 - [ ] 8.1.1: Axum HTTP server with health check
@@ -130,8 +130,8 @@ Use the amp-rs-executor agent to execute subtask X.Y.Z
 - [ ] 9.2.1: CI/CD with GitHub Actions
 - [ ] 9.2.2: Documentation and release prep
 
-**Current**: Phase 2 (Complete)
-**Next**: Phase 3 (Lessons System)
+**Current**: Phase 7 (Complete)
+**Next**: Phase 8 (HTTP & CLI)
 
 ---
 
