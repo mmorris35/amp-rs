@@ -2,6 +2,7 @@ use super::CodeChunk;
 use crate::embedding::EmbeddingGenerator;
 use crate::error::Result;
 use rusqlite::{params, Connection};
+use std::path::Path;
 use tracing::debug;
 
 /// Chunk storage operations
@@ -163,6 +164,56 @@ impl<'a> ChunkStorage<'a> {
 
         debug!("Found {} matching chunks for query", results.len());
         Ok(results)
+    }
+
+    /// List all indexed file paths in a repository
+    pub fn list_indexed_files(&self, repo_path: &Path) -> Result<Vec<String>> {
+        let repo_str = repo_path.to_string_lossy().to_string();
+        let mut stmt = self
+            .conn
+            .prepare("SELECT file_path FROM indexed_files WHERE repo_path = ?")?;
+        let paths: Vec<String> = stmt
+            .query_map([&repo_str], |row| row.get(0))?
+            .collect::<std::result::Result<Vec<_>, _>>()?
+            .into_iter()
+            .collect();
+
+        debug!(
+            "Listed {} indexed files for repo {:?}",
+            paths.len(),
+            repo_path
+        );
+        Ok(paths)
+    }
+
+    /// Delete all chunks and file records for a repository
+    pub fn delete_repo_data(&self, repo_path: &str) -> Result<()> {
+        // Get all chunk IDs for this repo
+        let mut stmt = self
+            .conn
+            .prepare("SELECT id FROM code_chunks WHERE repo_path = ?")?;
+        let ids: Vec<String> = stmt
+            .query_map([repo_path], |row| row.get(0))?
+            .collect::<std::result::Result<Vec<_>, _>>()?
+            .into_iter()
+            .collect();
+
+        // Delete from embeddings
+        for id in &ids {
+            self.conn
+                .execute("DELETE FROM chunk_embeddings WHERE id = ?", [id])?;
+        }
+
+        // Delete from chunks
+        self.conn
+            .execute("DELETE FROM code_chunks WHERE repo_path = ?", [repo_path])?;
+
+        // Delete from indexed files
+        self.conn
+            .execute("DELETE FROM indexed_files WHERE repo_path = ?", [repo_path])?;
+
+        debug!("Deleted all data for repo {}", repo_path);
+        Ok(())
     }
 }
 
