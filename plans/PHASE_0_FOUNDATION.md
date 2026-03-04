@@ -15,8 +15,8 @@
 **Prerequisites**: None (first subtask)
 
 **Deliverables**:
-- [ ] Run `cargo init --name amp-rs` in project root
-- [ ] Create `.gitignore` with Rust patterns:
+- [x] Run `cargo init --name amp-rs` in project root
+- [x] Create `.gitignore` with Rust patterns:
 
 ```gitignore
 /target
@@ -29,26 +29,26 @@
 models/*.onnx
 ```
 
-- [ ] Create `LICENSE` file (MIT)
-- [ ] Verify `cargo build` succeeds with default hello world
-- [ ] Git commit:
+- [x] Create `LICENSE` file (MIT)
+- [x] Verify `cargo build` succeeds with default hello world
+- [x] Git commit:
 ```bash
 git add -A && git commit -m "chore: initialize Cargo project"
 ```
 
 **Success Criteria**:
-- [ ] `cargo build` exits 0
-- [ ] `cargo run` prints "Hello, world!"
-- [ ] `.gitignore` exists with Rust patterns
-- [ ] `LICENSE` exists
+- [x] `cargo build` exits 0
+- [x] `cargo run` prints "Hello, world!"
+- [x] `.gitignore` exists with Rust patterns
+- [x] `LICENSE` exists
 
 **Completion Notes**:
-- **Implementation**: (describe what was done)
-- **Files Created**: (list with line counts)
-- **Files Modified**: (list)
+- **Implementation**: Ran cargo init, created .gitignore with Rust patterns, created MIT LICENSE file, verified build and run
+- **Files Created**: .gitignore (8 lines), LICENSE (21 lines), Cargo.toml, Cargo.lock, src/main.rs (3 lines)
+- **Files Modified**: None
 - **Tests**: N/A
-- **Build**: (pass/fail)
-- **Notes**: (any additional context)
+- **Build**: PASS - cargo build and cargo run both succeed
+- **Notes**: All documentation files were already present from setup, cargo init created base structure
 
 ---
 
@@ -58,7 +58,7 @@ git add -A && git commit -m "chore: initialize Cargo project"
 - [x] 0.1.1: Initialize Cargo Project
 
 **Deliverables**:
-- [ ] Update `Cargo.toml` with all MVP dependencies:
+- [x] Update `Cargo.toml` with all MVP dependencies:
 
 ```toml
 [package]
@@ -118,23 +118,23 @@ assert_cmd = "2"
 predicates = "3"
 ```
 
-- [ ] Run `cargo check` to verify dependency resolution
-- [ ] Git commit:
+- [x] Run `cargo check` to verify dependency resolution
+- [x] Git commit:
 ```bash
 git add -A && git commit -m "chore: configure all MVP dependencies in Cargo.toml"
 ```
 
 **Success Criteria**:
-- [ ] `cargo check` exits 0 (all deps resolve)
-- [ ] No version conflicts
+- [x] `cargo check` exits 0 (all deps resolve)
+- [x] No version conflicts
 
 **Completion Notes**:
-- **Implementation**: (describe what was done)
-- **Files Created**: (list with line counts)
-- **Files Modified**: (list)
+- **Implementation**: Updated Cargo.toml with all MVP dependencies (rmcp, tokio, axum, rusqlite, ort, tokenizers, ndarray, notify, clap, serde, chrono, uuid, etc.). Fixed ort version to 2.0.0-rc.11 to resolve availability issue.
+- **Files Created**: None
+- **Files Modified**: Cargo.toml (55 lines), Cargo.lock (3055 lines)
 - **Tests**: N/A
-- **Build**: (pass/fail)
-- **Notes**: (any additional context)
+- **Build**: PASS - cargo check resolves all dependencies without conflicts
+- **Notes**: ort crate is still in RC phase, specified explicit version 2.0.0-rc.11 instead of "2"
 
 ---
 
@@ -144,14 +144,14 @@ git add -A && git commit -m "chore: configure all MVP dependencies in Cargo.toml
 - [x] 0.1.2: Configure Dependencies
 
 **Deliverables**:
-- [ ] Create module directory structure:
+- [x] Create module directory structure:
 
 ```bash
 mkdir -p src/{storage,embedding,lessons,checkpoints,indexing,watcher,mcp,http}
 mkdir -p tests/common
 ```
 
-- [ ] Create `src/lib.rs`:
+- [x] Create `src/lib.rs`:
 
 ```rust
 #![deny(warnings)]
@@ -168,7 +168,7 @@ pub mod storage;
 pub mod watcher;
 ```
 
-- [ ] Create `src/error.rs`:
+- [x] Create `src/error.rs`:
 
 ```rust
 use thiserror::Error;
@@ -269,7 +269,7 @@ impl Default for Config {
 }
 ```
 
-- [ ] Create stub `mod.rs` for each module:
+- [x] Create stub `mod.rs` for each module:
 
 ```rust
 // src/storage/mod.rs
@@ -282,7 +282,7 @@ impl Default for Config {
 // src/http/mod.rs
 ```
 
-- [ ] Create `src/main.rs`:
+- [x] Create `src/main.rs`:
 
 ```rust
 use anyhow::Result;
@@ -297,7 +297,7 @@ fn main() -> Result<()> {
 }
 ```
 
-- [ ] Create `tests/common/mod.rs`:
+- [x] Create `tests/common/mod.rs`:
 
 ```rust
 use tempfile::TempDir;
@@ -311,32 +311,32 @@ pub fn test_data_dir() -> (TempDir, PathBuf) {
 }
 ```
 
-- [ ] Run `cargo check` to verify module structure
-- [ ] Git commit:
+- [x] Run `cargo check` to verify module structure
+- [x] Git commit:
 ```bash
 git add -A && git commit -m "feat: create module skeleton with config and error types"
 ```
 
 **Success Criteria**:
-- [ ] `cargo check` exits 0
-- [ ] All modules importable from `lib.rs`
-- [ ] Error types compile
-- [ ] Config struct derives correctly
+- [x] `cargo check` exits 0
+- [x] All modules importable from `lib.rs`
+- [x] Error types compile
+- [x] Config struct derives correctly
 
 **Completion Notes**:
-- **Implementation**: (describe what was done)
-- **Files Created**: (list with line counts)
-- **Files Modified**: (list)
+- **Implementation**: Created complete module skeleton with 8 directories (storage, embedding, lessons, checkpoints, indexing, watcher, mcp, http). Implemented lib.rs with all module declarations, error.rs with AmpError enum and Result type, config.rs with Cli and Config structs using clap and serde, main.rs with CLI parsing, and test helper in tests/common/mod.rs
+- **Files Created**: src/lib.rs (12 lines), src/error.rs (45 lines), src/config.rs (66 lines), src/main.rs (10 lines), tests/common/mod.rs (9 lines), 8 stub mod.rs files (1 line each), 8 module directories
+- **Files Modified**: Cargo.toml (updated import for config), src/main.rs (replaced hello world)
 - **Tests**: N/A
-- **Build**: (pass/fail)
-- **Notes**: (any additional context)
+- **Build**: PASS - cargo check exits 0 with no warnings
+- **Notes**: Added #[allow(dead_code)] to Config struct since it will be used in later phases
 
 ---
 
 ### Task 0.1 Complete — Squash Merge
-- [ ] All subtasks 0.1.1–0.1.3 complete
-- [ ] `cargo check` passes
-- [ ] Squash merge to main:
+- [x] All subtasks 0.1.1–0.1.3 complete
+- [x] `cargo check` passes
+- [x] Squash merge to main:
 ```bash
 git checkout main && git merge --squash feature/0-1-project-init
 git commit -m "chore: complete task 0.1 - project initialization"
@@ -356,7 +356,7 @@ git push origin main
 - [x] 0.1.3: Create Module Skeleton
 
 **Deliverables**:
-- [ ] Create `rustfmt.toml`:
+- [x] Create `rustfmt.toml`:
 
 ```toml
 edition = "2021"
@@ -365,32 +365,32 @@ use_field_init_shorthand = true
 use_try_shorthand = true
 ```
 
-- [ ] Create `clippy.toml`:
+- [x] Create `clippy.toml`:
 
 ```toml
 too-many-arguments-threshold = 8
 ```
 
-- [ ] Verify linting passes:
+- [x] Verify linting passes:
 ```bash
 cargo fmt --check && cargo clippy --workspace -- -D warnings
 ```
-- [ ] Git commit:
+- [x] Git commit:
 ```bash
 git add -A && git commit -m "chore: configure rustfmt and clippy"
 ```
 
 **Success Criteria**:
-- [ ] `cargo fmt --check` exits 0
-- [ ] `cargo clippy --workspace -- -D warnings` exits 0
+- [x] `cargo fmt --check` exits 0
+- [x] `cargo clippy --workspace -- -D warnings` exits 0
 
 **Completion Notes**:
-- **Implementation**: (describe what was done)
-- **Files Created**: (list with line counts)
-- **Files Modified**: (list)
+- **Implementation**: Created rustfmt.toml with max_width=100 and shorthand settings. Created clippy.toml with too-many-arguments-threshold=8. Applied cargo fmt to ensure all code follows formatting rules, then verified lint passes.
+- **Files Created**: rustfmt.toml (4 lines), clippy.toml (1 line)
+- **Files Modified**: src/config.rs (reformatted for 100 char width), tests/common/mod.rs (import order fixed)
 - **Tests**: N/A
-- **Build**: (pass/fail)
-- **Notes**: (any additional context)
+- **Build**: PASS - cargo fmt --check and cargo clippy both pass
+- **Notes**: Had to apply cargo fmt once to reformat config.rs attribute macros to stay within 100 char limit
 
 ---
 
@@ -400,7 +400,7 @@ git add -A && git commit -m "chore: configure rustfmt and clippy"
 - [x] 0.2.1: Linting and Formatting Setup
 
 **Deliverables**:
-- [ ] Add a placeholder integration test `tests/integration_test.rs`:
+- [x] Add a placeholder integration test `tests/integration_test.rs`:
 
 ```rust
 mod common;
@@ -412,7 +412,7 @@ fn placeholder_test() {
 }
 ```
 
-- [ ] Add a unit test to `src/error.rs`:
+- [x] Add a unit test to `src/error.rs`:
 
 ```rust
 #[cfg(test)]
@@ -434,34 +434,34 @@ mod tests {
 }
 ```
 
-- [ ] Run full verification:
+- [x] Run full verification:
 ```bash
 cargo fmt --check && cargo clippy --workspace -- -D warnings && cargo test --workspace
 ```
-- [ ] Git commit:
+- [x] Git commit:
 ```bash
 git add -A && git commit -m "test: add testing infrastructure and placeholder tests"
 ```
 
 **Success Criteria**:
-- [ ] `cargo test --workspace` discovers and runs tests
-- [ ] At least 3 tests pass
-- [ ] Full verification chain passes
+- [x] `cargo test --workspace` discovers and runs tests
+- [x] At least 3 tests pass
+- [x] Full verification chain passes
 
 **Completion Notes**:
-- **Implementation**: (describe what was done)
-- **Files Created**: (list with line counts)
-- **Files Modified**: (list)
-- **Tests**: (X tests passing)
-- **Build**: (pass/fail)
-- **Notes**: (any additional context)
+- **Implementation**: Created tests/integration_test.rs with placeholder_test that validates temp directory creation. src/error.rs already contained two unit tests (test_error_display and test_error_from_io). Ran full verification chain: cargo fmt --check (pass), cargo clippy (pass), cargo test (3 tests pass).
+- **Files Created**: tests/integration_test.rs (7 lines)
+- **Files Modified**: tests/common/mod.rs (minor import order formatting)
+- **Tests**: 3 tests passing (2 unit tests in error.rs + 1 integration test in integration_test.rs)
+- **Build**: PASS - full verification chain completes successfully in ~36 seconds
+- **Notes**: First full test run compiles dev-dependencies (assert_cmd, predicates, etc.) which adds compilation time. Subsequent runs are much faster. All 3 tests pass with no warnings or errors.
 
 ---
 
 ### Task 0.2 Complete — Squash Merge
-- [ ] All subtasks 0.2.1–0.2.2 complete
-- [ ] Full verification passes: `cargo fmt --check && cargo clippy --workspace -- -D warnings && cargo test --workspace`
-- [ ] Squash merge to main:
+- [x] All subtasks 0.2.1–0.2.2 complete
+- [x] Full verification passes: `cargo fmt --check && cargo clippy --workspace -- -D warnings && cargo test --workspace`
+- [x] Squash merge to main:
 ```bash
 git checkout main && git merge --squash feature/0-2-dev-tools
 git commit -m "chore: complete task 0.2 - development tools setup"

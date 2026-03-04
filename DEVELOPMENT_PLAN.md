@@ -63,11 +63,11 @@ Use the amp-rs-executor agent to execute subtask X.Y.Z
 ## Progress Tracking
 
 ### Phase 0: Foundation
-- [ ] 0.1.1: Initialize Cargo project
-- [ ] 0.1.2: Configure dependencies in Cargo.toml
-- [ ] 0.1.3: Create module skeleton
-- [ ] 0.2.1: Linting and formatting setup
-- [ ] 0.2.2: Testing infrastructure
+- [x] 0.1.1: Initialize Cargo project
+- [x] 0.1.2: Configure dependencies in Cargo.toml
+- [x] 0.1.3: Create module skeleton
+- [x] 0.2.1: Linting and formatting setup
+- [x] 0.2.2: Testing infrastructure
 
 ### Phase 1: Storage Layer
 - [ ] 1.1.1: SQLite connection manager with WAL
@@ -130,8 +130,8 @@ Use the amp-rs-executor agent to execute subtask X.Y.Z
 - [ ] 9.2.1: CI/CD with GitHub Actions
 - [ ] 9.2.2: Documentation and release prep
 
-**Current**: Phase 0
-**Next**: 0.1.1
+**Current**: Phase 1
+**Next**: 1.1.1
 
 ---
 
