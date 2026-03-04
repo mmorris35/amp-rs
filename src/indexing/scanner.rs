@@ -210,15 +210,11 @@ mod tests {
 
         // Should find main.rs and lib.rs, but not ignored.rs
         let file_names: Vec<_> = files.iter().map(|f| f.path.file_name()).collect();
-        assert!(file_names
-            .iter()
-            .any(|n| n.map_or(false, |n| n == "main.rs")));
-        assert!(file_names
-            .iter()
-            .any(|n| n.map_or(false, |n| n == "lib.rs")));
+        assert!(file_names.iter().any(|n| n.is_some_and(|n| n == "main.rs")));
+        assert!(file_names.iter().any(|n| n.is_some_and(|n| n == "lib.rs")));
         assert!(!file_names
             .iter()
-            .any(|n| n.map_or(false, |n| n == "ignored.rs")));
+            .any(|n| n.is_some_and(|n| n == "ignored.rs")));
     }
 
     #[test]

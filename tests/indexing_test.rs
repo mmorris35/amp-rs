@@ -76,10 +76,10 @@ fn test_scanner_skips_large_files() {
     let file_names: Vec<_> = files.iter().map(|f| f.path.file_name()).collect();
     assert!(file_names
         .iter()
-        .any(|n| n.map_or(false, |n| n == "small.rs")));
+        .any(|n| n.is_some_and(|n| n == "small.rs")));
     assert!(!file_names
         .iter()
-        .any(|n| n.map_or(false, |n| n == "large.rs")));
+        .any(|n| n.is_some_and(|n| n == "large.rs")));
 }
 
 #[test]

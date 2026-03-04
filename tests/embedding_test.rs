@@ -11,7 +11,7 @@ fn test_embedding_dimension() {
 
 #[test]
 fn test_normalize_vector() {
-    let v = vec![3.0_f32, 4.0];
+    let v = [3.0_f32, 4.0];
     let norm: f32 = v.iter().map(|x| x * x).sum::<f32>().sqrt();
     let normalized: Vec<f32> = v.iter().map(|x| x / norm).collect();
     let result_norm: f32 = normalized.iter().map(|x| x * x).sum::<f32>().sqrt();

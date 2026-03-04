@@ -2,6 +2,7 @@ use std::path::PathBuf;
 use tempfile::TempDir;
 
 /// Create a temporary directory for test databases
+#[allow(dead_code)]
 pub fn test_data_dir() -> (TempDir, PathBuf) {
     let dir = TempDir::new().expect("Failed to create temp dir");
     let path = dir.path().to_path_buf();
@@ -9,6 +10,7 @@ pub fn test_data_dir() -> (TempDir, PathBuf) {
 }
 
 /// Create a temporary database file path
+#[allow(dead_code)]
 pub fn test_db_path() -> (TempDir, PathBuf) {
     let dir = TempDir::new().expect("Failed to create temp dir");
     let db_path = dir.path().join("test.db");

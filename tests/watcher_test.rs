@@ -1,8 +1,6 @@
 use amp_rs::storage::Storage;
-use amp_rs::watcher::handler::{diff_index, full_reindex, DiffResult};
+use amp_rs::watcher::handler::{diff_index, full_reindex};
 use std::fs;
-use std::path::PathBuf;
-use std::time::{SystemTime, UNIX_EPOCH};
 use tempfile::tempdir;
 
 #[test]
@@ -61,7 +59,7 @@ fn test_diff_index_detects_changed_files() {
 
     // File should be detected as changed
     assert_eq!(result.new_files.len(), 0);
-    assert!(result.changed_files.len() >= 1); // may include .gitignore if created
+    assert!(!result.changed_files.is_empty()); // may include .gitignore if created
     assert_eq!(result.deleted_files.len(), 0);
 }
 
@@ -133,12 +131,9 @@ fn test_full_reindex_clears_data() {
     full_reindex(storage.connection(), temp_src.path()).unwrap();
 
     // After reindex, the old entry should be cleared and replaced with the file on disk
-    let after = chunk_storage
+    let _after = chunk_storage
         .get_indexed_file(test_file.to_string_lossy().as_ref())
         .unwrap();
-    // After full reindex, if the file still exists on disk, it may be re-indexed
-    // So we just verify the operation completes without error
-    assert!(true);
 }
 
 #[test]

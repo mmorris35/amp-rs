@@ -1,7 +1,6 @@
 use amp_rs::lessons::storage::LessonStorage;
-use amp_rs::lessons::{Lesson, Severity};
+use amp_rs::lessons::Severity;
 use amp_rs::storage::{sqlite::SqliteStorage, Storage};
-use std::sync::Arc;
 
 #[test]
 fn test_lesson_crud_operations() {
