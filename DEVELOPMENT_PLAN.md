@@ -77,10 +77,10 @@ Use the amp-rs-executor agent to execute subtask X.Y.Z
 - [x] 1.2.2: Storage integration tests
 
 ### Phase 2: Embedding Engine
-- [ ] 2.1.1: ONNX Runtime session setup
-- [ ] 2.1.2: Tokenizer and embedding generation
-- [ ] 2.2.1: Dedicated thread pool for embeddings
-- [ ] 2.2.2: Embedding engine tests
+- [x] 2.1.1: ONNX Runtime session setup
+- [x] 2.1.2: Tokenizer and embedding generation
+- [x] 2.2.1: Dedicated thread pool for embeddings
+- [x] 2.2.2: Embedding engine tests
 
 ### Phase 3: Lessons System
 - [ ] 3.1.1: Lesson model and storage operations
@@ -130,8 +130,8 @@ Use the amp-rs-executor agent to execute subtask X.Y.Z
 - [ ] 9.2.1: CI/CD with GitHub Actions
 - [ ] 9.2.2: Documentation and release prep
 
-**Current**: Phase 2
-**Next**: 2.1.1
+**Current**: Phase 2 (Complete)
+**Next**: Phase 3 (Lessons System)
 
 ---
 
