@@ -79,8 +79,6 @@ impl super::EmbeddingGenerator for OnnxEmbedding {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn test_dimension() {
         // all-MiniLM-L6-v2 should produce 384-dimensional vectors
