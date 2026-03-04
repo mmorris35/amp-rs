@@ -21,8 +21,8 @@ impl OnnxEmbedding {
 
         if !model_path.exists() {
             return Err(AmpError::Embedding(format!(
-                "Model not found at {:?}. Download all-MiniLM-L6-v2 ONNX model.",
-                model_path
+                "Model not found at {:?}. Download all-MiniLM-L6-v2 ONNX model using: ./scripts/download-model.sh {}",
+                model_path, model_dir.display()
             )));
         }
 
