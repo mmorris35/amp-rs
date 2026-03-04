@@ -1,5 +1,5 @@
-use tempfile::TempDir;
 use std::path::PathBuf;
+use tempfile::TempDir;
 
 /// Create a temporary directory for test databases
 pub fn test_data_dir() -> (TempDir, PathBuf) {

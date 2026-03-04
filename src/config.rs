@@ -3,7 +3,11 @@ use serde::Deserialize;
 use std::path::PathBuf;
 
 #[derive(Parser, Debug, Clone)]
-#[command(name = "amp-rs", version, about = "Agent Memory Protocol - Reference Implementation")]
+#[command(
+    name = "amp-rs",
+    version,
+    about = "Agent Memory Protocol - Reference Implementation"
+)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Command,
