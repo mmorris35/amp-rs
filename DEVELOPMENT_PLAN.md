@@ -104,10 +104,10 @@ Use the amp-rs-executor agent to execute subtask X.Y.Z
 - [ ] 5.2.2: Code indexing integration tests
 
 ### Phase 6: File Watcher
-- [ ] 6.1.1: notify-rs watcher setup
-- [ ] 6.1.2: Incremental indexing (mtime-based diff)
-- [ ] 6.2.1: On-demand indexing tools (index_repo, diff_index, full_reindex)
-- [ ] 6.2.2: File watcher integration tests
+- [x] 6.1.1: notify-rs watcher setup
+- [x] 6.1.2: Incremental indexing (mtime-based diff)
+- [x] 6.2.1: On-demand indexing tools (index_repo, diff_index, full_reindex)
+- [x] 6.2.2: File watcher integration tests
 
 ### Phase 7: MCP Server
 - [x] 7.1.1: rmcp server bootstrap (stdio transport)
@@ -130,7 +130,7 @@ Use the amp-rs-executor agent to execute subtask X.Y.Z
 - [ ] 9.2.1: CI/CD with GitHub Actions
 - [ ] 9.2.2: Documentation and release prep
 
-**Current**: Phase 7 (Complete)
+**Current**: Phase 6 (Complete), Phase 7 (Complete)
 **Next**: Phase 8 (HTTP & CLI)
 
 ---
