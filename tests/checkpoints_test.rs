@@ -1,5 +1,5 @@
-use amp_rs::checkpoints::{AgentState};
 use amp_rs::checkpoints::storage::CheckpointStorage;
+use amp_rs::checkpoints::AgentState;
 use amp_rs::storage::sqlite::SqliteStorage;
 use amp_rs::storage::Storage;
 use chrono::Utc;
@@ -51,15 +51,9 @@ fn test_checkpoint_list_agents() {
 
     // Add checkpoints for different agents
     let state = serde_json::json!({});
-    checkpoint_storage
-        .add("agent-a", "task", &state)
-        .unwrap();
-    checkpoint_storage
-        .add("agent-b", "task", &state)
-        .unwrap();
-    checkpoint_storage
-        .add("agent-c", "task", &state)
-        .unwrap();
+    checkpoint_storage.add("agent-a", "task", &state).unwrap();
+    checkpoint_storage.add("agent-b", "task", &state).unwrap();
+    checkpoint_storage.add("agent-c", "task", &state).unwrap();
 
     // List agents
     let agents = checkpoint_storage.list_agents().unwrap();
@@ -82,9 +76,7 @@ fn test_checkpoint_idle_detection() {
         .add("agent-recent", "current", &state)
         .unwrap();
 
-    let status = checkpoint_storage
-        .get_agent_status("agent-recent")
-        .unwrap();
+    let status = checkpoint_storage.get_agent_status("agent-recent").unwrap();
     assert_eq!(status.status, AgentState::InProgress);
 
     // Add an old checkpoint
@@ -97,7 +89,13 @@ fn test_checkpoint_idle_detection() {
         .execute(
             "INSERT INTO checkpoints (id, agent, working_on, state, created_at)
              VALUES (?1, ?2, ?3, ?4, ?5)",
-            rusqlite::params![id, "agent-old", "old-task", state_str, old_time.to_rfc3339()],
+            rusqlite::params![
+                id,
+                "agent-old",
+                "old-task",
+                state_str,
+                old_time.to_rfc3339()
+            ],
         )
         .unwrap();
 
@@ -117,17 +115,11 @@ fn test_checkpoint_get_recent() {
     let state2 = serde_json::json!({ "task": 2 });
     let state3 = serde_json::json!({ "task": 3 });
 
-    checkpoint_storage
-        .add("agent", "task1", &state1)
-        .unwrap();
+    checkpoint_storage.add("agent", "task1", &state1).unwrap();
     std::thread::sleep(std::time::Duration::from_millis(10));
-    checkpoint_storage
-        .add("agent", "task2", &state2)
-        .unwrap();
+    checkpoint_storage.add("agent", "task2", &state2).unwrap();
     std::thread::sleep(std::time::Duration::from_millis(10));
-    checkpoint_storage
-        .add("agent", "task3", &state3)
-        .unwrap();
+    checkpoint_storage.add("agent", "task3", &state3).unwrap();
 
     // Get recent checkpoints
     let recent = checkpoint_storage.get_recent("agent", 2).unwrap();

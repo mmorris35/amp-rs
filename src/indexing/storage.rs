@@ -190,8 +190,8 @@ pub struct SearchResult {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::storage::{sqlite::SqliteStorage, Storage};
     use crate::embedding::EmbeddingGenerator;
+    use crate::storage::{sqlite::SqliteStorage, Storage};
 
     #[test]
     fn test_store_and_retrieve_chunks() {
