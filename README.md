@@ -262,6 +262,50 @@ Measured on stable hardware. All operations are single-threaded for predictabili
 
 ---
 
+## Building from Source
+
+### Requirements
+
+- Rust 1.70+ (stable toolchain)
+- Git
+- C compiler (for native dependencies: ONNX Runtime, SQLite)
+
+On macOS, if you don't have the C build tools:
+
+```bash
+xcode-select --install
+```
+
+### Build steps
+
+```bash
+# Clone the repo
+git clone https://github.com/mmorris35/amp-rs.git
+cd amp-rs
+
+# Build in release mode
+cargo build --release
+
+# Binary is at target/release/amp-rs
+./target/release/amp-rs serve
+```
+
+### First build note
+
+The first build takes 2-3 minutes because it compiles ONNX Runtime and SQLite extensions. Subsequent builds are fast (<30s).
+
+### Verify the build
+
+```bash
+# Run the full test suite
+cargo test --workspace
+
+# Run benchmarks
+cargo test --test benchmarks_test -- --nocapture --ignored
+```
+
+---
+
 ## Architecture
 
 | Component | Crate | Why |
