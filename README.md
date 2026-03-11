@@ -128,6 +128,40 @@ This is the reference board. Everything here works, with sensible defaults, no c
 
 ---
 
+## Web Dashboard
+
+amp-rs includes an optional built-in web dashboard at `/ui` with real-time metrics, semantic search, checkpoint browsing, and an interactive knowledge graph explorer.
+
+> **Note:** The screenshots below are from [Nellie](https://github.com/mmorris35/nellie-rs), my private implementation built on the amp-rs reference architecture. Your dashboard will look the same — Nellie is amp-rs with my personal configuration and data.
+
+### Dashboard Overview
+![Dashboard](docs/screenshots/dashboard.png)
+Live stats, tool metrics, and activity feed with 10-second auto-refresh.
+
+### Semantic & Hybrid Search
+![Search](docs/screenshots/search.png)
+Toggle between pure semantic search and hybrid search (vector + knowledge graph expansion).
+
+### Checkpoint Browser
+![Checkpoints](docs/screenshots/checkpoints.png)
+Browse agent checkpoints with per-agent filtering, text search, and expandable state JSON.
+
+### Knowledge Graph Explorer
+![Graph](docs/screenshots/graph.png)
+Interactive force-directed graph visualization with color-coded entity types. Click nodes to explore neighborhoods.
+
+### Tool Metrics
+![Metrics](docs/screenshots/metrics.png)
+Per-tool and per-agent metrics: invocation counts, latency histograms, token savings estimates.
+
+### Lessons Learned
+![Lessons](docs/screenshots/lessons.png)
+
+### Indexed Files
+![Files](docs/screenshots/files.png)
+
+---
+
 ## Bolt on the graph: making it fly
 
 > The reference board gets you driving. The graph module is the turbo kit.
